@@ -1,24 +1,30 @@
+const e = require('express')
 const express = require('express')
 const app = express()
-const port = 3005
+const port = 3006
 
-const MongoClient = require('mongodb').MongoClient
 
-MongoClient.connect('mongodb://localhost:27017/product', (err, client) => {
-  if (err) throw err
-
-  const db = client.db('product')
-
-  db.collection('productDt').find().toArray((err, result) => {
-    if (err) throw err
-
-    console.log(result)
-  })
+app.get('/profail',Token,Validation,(req,res)=>{
+  res.send("successs")
+  console.log('user loged');
 })
-app.get('/',(req,res)=>{
-    res.send('heello ')
-    res.end()
-})
+function Token(req,res,next){
+  console.log('token creating');
+  setInterval(()=>{
+const TOKEN =123
+req.token = Token
+next()
+  },1000)
+}
+
+function Validation(req,res,next){
+if(req.token){
+  console.log('token approved');
+  next()
+}
+
+}
+
 app.listen(port,()=>{
-    console.log(`you app running port: ${port}`);
+  console.log(`yor app is listening on port:${port}`);
 })
